@@ -8,6 +8,8 @@ import Testimonials from './components/Testimonials'
 import CallToAction from './components/CallToAction'
 import Footer from './components/Footer'
 import TopNav from './components/TopNav'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import ProjectManager from './components/ProjectManager'
 
 // Page transition component
 const PageTransition = ({ children }) => (
@@ -62,60 +64,64 @@ function App() {
   }, [])
 
   return (
-    <AnimatePresence mode="wait">
-      {isLoading ? (
-        <motion.div
-          key="loader"
-          className="fixed inset-0 bg-black flex items-center justify-center"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+    <Router>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
           <motion.div
-            className="text-4xl font-display text-white"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            key="loader"
+            className="fixed inset-0 bg-black flex items-center justify-center"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            Loading...
+            <motion.div
+              className="text-4xl font-display text-white"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              Loading...
+            </motion.div>
           </motion.div>
-        </motion.div>
-      ) : (
-        <motion.div
-          key="content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-black min-h-screen"
-        >
-          <TopNav />
-          <PageTransition>
-            <main className="relative">
-              <AnimatedSection id="hero">
-                <Hero />
-              </AnimatedSection>
-
-              <AnimatedSection id="services">
-                <Services />
-              </AnimatedSection>
-
-              <AnimatedSection id="portfolio">
-                <Portfolio />
-              </AnimatedSection>
-
-              <AnimatedSection id="testimonials">
-                <Testimonials />
-              </AnimatedSection>
-
-              <AnimatedSection id="contact">
-                <CallToAction />
-              </AnimatedSection>
-
-              <Footer />
-            </main>
-          </PageTransition>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-black min-h-screen"
+          >
+            <TopNav />
+            <PageTransition>
+              <main className="relative">
+                <Routes>
+                  <Route path="/" element={
+                    <>
+                      <AnimatedSection id="hero">
+                        <Hero />
+                      </AnimatedSection>
+                      <AnimatedSection id="services">
+                        <Services />
+                      </AnimatedSection>
+                      <AnimatedSection id="portfolio">
+                        <Portfolio />
+                      </AnimatedSection>
+                      <AnimatedSection id="testimonials">
+                        <Testimonials />
+                      </AnimatedSection>
+                      <AnimatedSection id="contact">
+                        <CallToAction />
+                      </AnimatedSection>
+                      <Footer />
+                    </>
+                  } />
+                  <Route path="/manage" element={<ProjectManager />} />
+                </Routes>
+              </main>
+            </PageTransition>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Router>
   )
 }
 
